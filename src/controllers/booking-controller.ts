@@ -18,10 +18,6 @@ export const listBooking = async (req: AuthenticatedRequest, res: Response, next
       Room: booking.Room,
     });
   } catch (error) {
-    // if (error instanceof badRequestError || error instanceof forbiddenError) {
-    //   return res.sendStatus(400);
-    // }
-
     next(error);
   }
 };
@@ -33,39 +29,14 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response, ne
     const { userId } = req;
     const { roomId } = req.body as Record<string, number>;
 
-    if (!roomId) {
-      // Erro de solicitação inválida (400) - roomId está ausente
-      throw badRequestError();
-    }
-
     await bookingService.verifyEnrollmentTicket(userId);
     await bookingService.checkBookingValidity(roomId);
-
     const booking = await bookingService.createBooking({ roomId, userId });
 
     return res.status(200).send({
       bookingId: booking.id,
     });
   } catch (error) {
-  //   if (error instanceof badRequestError) {
-  //     // Erro de solicitação inválida (400)
-  //     return res.sendStatus(400);
-  //   }
-  //   if (error instanceof unauthorizedError) {
-  //     // Erro de autenticação não autorizada (401)
-  //     return res.sendStatus(401);
-  //   }
-  //   if (error instanceof notFoundError) {
-  //     // Erro de recurso não encontrado (404)
-  //     return res.sendStatus(404);
-  //   }
-  //   if (error instanceof forbiddenError) {
-  //     // Erro de acesso proibido (403)
-  //     return res.sendStatus(403);
-  //   }
-  //   // Erro interno do servidor (500)
-  //   return res.sendStatus(500);
-  // }
   next(error);
   }
 };

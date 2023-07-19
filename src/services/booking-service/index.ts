@@ -24,8 +24,8 @@ const bookingService = {
       !ticket ||
       ticket.status === 'RESERVED' ||
       ticket.TicketType.isRemote ||
-      !ticket.TicketType.includesHotel ||
-      ticket.status !== 'PAID'
+      !ticket.TicketType.includesHotel 
+      // || ticket.status !== 'PAID'
     ) {
       throw forbiddenError();
     }
@@ -42,6 +42,7 @@ const bookingService = {
 
   // Cria uma nova reserva com o roomId e userId fornecidos
   createBooking: async ({ roomId, userId }: { roomId: number; userId: number }) => {
+    if(!roomId) throw badRequestError
     await bookingService.verifyEnrollmentTicket(userId); // Verifica o ticket de matrícula antes de criar a reserva
     await bookingService.checkBookingValidity(roomId); // Verifica a validade da reserva antes de criar
 
