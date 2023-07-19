@@ -54,6 +54,22 @@ const bookingService = {
   editBooking: async ({ id, roomId, userId }: { id: number; roomId: number; userId: number }) => {
     if (!roomId) throw badRequestError();
 
+    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    if (!enrollment) throw forbiddenError();
+
+    const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+
+    // Verifica se o ticket existe, se está reservado, se inclui hospedagem e se foi pago
+    if (
+      !ticket ||
+      ticket.status === 'RESERVED' ||
+      ticket.TicketType.isRemote ||
+      !ticket.TicketType.includesHotel 
+      || ticket.status !== 'PAID'
+    ) {
+      throw forbiddenError();
+    }
+
   await bookingService.checkBookingValidity(roomId);
   const booking = await bookingRepository.listByUserId(userId);
 
