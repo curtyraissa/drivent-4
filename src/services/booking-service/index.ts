@@ -1,5 +1,5 @@
 import bookingRepository from '../../repositories/booking-repository';
-import { notFoundError, forbiddenError } from '@/errors';
+import { notFoundError, forbiddenError, unauthorizedError } from '@/errors';
 import enrollmentRepository from '../../repositories/enrollment-repository';
 import ticketsRepository from '../../repositories/tickets-repository';
 
@@ -19,8 +19,14 @@ const bookingService = {
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
 
-    // Verifica se o ticket existe, se está reservado e se inclui hospedagem
-    if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
+    // Verifica se o ticket existe, se está reservado, se inclui hospedagem e se foi pago
+    if (
+      !ticket ||
+      ticket.status === 'RESERVED' ||
+      ticket.TicketType.isRemote ||
+      !ticket.TicketType.includesHotel ||
+      ticket.status !== 'PAID'
+    ) {
       throw forbiddenError();
     }
   },
@@ -36,10 +42,14 @@ const bookingService = {
 
   // Cria uma nova reserva com o roomId e userId fornecidos
   createBooking: async ({ roomId, userId }: { roomId: number; userId: number }) => {
+    await bookingService.verifyEnrollmentTicket(userId); // Verifica o ticket de matrícula antes de criar a reserva
+    await bookingService.checkBookingValidity(roomId); // Verifica a validade da reserva antes de criar
+
     return bookingRepository.createBooking({ roomId, userId });
   },
 
-  // Atualiza uma reserva existente com o id, roomId e userId fornecidos
+
+  //Atualiza uma reserva existente com o id, roomId e userId fornecidos
   editBooking: async ({ id, roomId, userId }: { id: number; roomId: number; userId: number }) => {
     return bookingRepository.editBooking({ id, roomId, userId });
   },
