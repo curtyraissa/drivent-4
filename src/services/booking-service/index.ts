@@ -1,5 +1,5 @@
 import bookingRepository from '../../repositories/booking-repository';
-import { notFoundError, forbiddenError, unauthorizedError } from '@/errors';
+import { notFoundError, forbiddenError, badRequestError } from '@/errors';
 import enrollmentRepository from '../../repositories/enrollment-repository';
 import ticketsRepository from '../../repositories/tickets-repository';
 
@@ -51,6 +51,13 @@ const bookingService = {
 
   //Atualiza uma reserva existente com o id, roomId e userId fornecidos
   editBooking: async ({ id, roomId, userId }: { id: number; roomId: number; userId: number }) => {
+    if (!roomId) throw badRequestError();
+
+  await bookingService.checkBookingValidity(roomId);
+  const booking = await bookingRepository.listByUserId(userId);
+
+  if (!booking || booking.userId !== userId) throw forbiddenError();
+    
     return bookingRepository.editBooking({ id, roomId, userId });
   },
 };
