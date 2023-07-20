@@ -59,9 +59,8 @@ const bookingService = {
     // if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
     //   throw forbiddenError();
     // }
-
-      const bookingExist = bookingRepository.listByUserId(userId);
-      if (!bookingExist) throw forbiddenError();
+    const bookingExist = await bookingRepository.listByUserId(userId);
+    if (!bookingExist) throw forbiddenError();
     
       const room = await bookingRepository.listByIdRoom(roomId);
       if (!room) throw notFoundError();
