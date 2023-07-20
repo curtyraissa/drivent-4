@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { CreateBookingParams, UpdateBookingParams } from '../../protocols';
+// import { Booking } from '@prisma/client';
+import { CreateBookingParams } from '../../protocols';
+// export type UpdateBookingParams = Omit<Booking, 'createdAt' | 'updatedAt'> & { bookingId: number };
 
 const prisma = new PrismaClient();
 
@@ -26,6 +28,14 @@ const bookingRepository = {
     });
   },
 
+  list1ByRoomId: async (roomId: number) => {
+    return prisma.booking.findFirst({
+      where: {
+        roomId,
+      },
+    });
+  },
+
   // Lista uma reserva pelo userId, incluindo os detalhes do quarto
   listByUserId: async (userId: number) => {
     return prisma.booking.findFirst({
@@ -39,14 +49,15 @@ const bookingRepository = {
   },
 
   // Atualiza uma reserva com o id, roomId e userId fornecidos
-  editBooking: async ({ id, roomId, userId }: UpdateBookingParams) => {
+  editBooking: async (userId: number, roomId: number, bookingId: number) => {
     return prisma.booking.update({
       where: {
-        id,
+        id: bookingId,
       },
       data: {
         roomId,
         userId,
+        updatedAt: new Date(),
       },
     });
   },

@@ -51,43 +51,28 @@ const bookingService = {
 
 
   //Atualiza uma reserva existente com o id, roomId e userId fornecidos
-  editBooking: async ({ id, roomId, userId }: { id: number; roomId: number; userId: number }) => {
-    if (!roomId) throw badRequestError();
+  editBooking: async ({ bookingId, roomId, userId }: { bookingId: number; roomId: number; userId: number }) => {
+    
+    // const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    // if (!enrollment) throw forbiddenError();
+    // const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+    // if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
+    //   throw forbiddenError();
+    // }
 
-    // const bookingx = await bookingService.getBookingByUserId(userId);
-    // if (!bookingx || bookingx.userId !== userId) {
-    //     throw forbiddenError// Erro de acesso proibido (403) - usuário não tem reserva
-    //   }
-
-    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-    if (!enrollment) throw forbiddenError();
-
-    const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
-
-    // Verifica se o ticket existe, se está reservado, se inclui hospedagem e se foi pago
-    if (
-      !ticket ||
-      ticket.status === 'RESERVED' ||
-      ticket.TicketType.isRemote ||
-      !ticket.TicketType.includesHotel 
-      || ticket.status !== 'PAID'
-    ) {
-      throw forbiddenError();
-    }
-
-  // await bookingService.checkBookingValidity(roomId);
-  const room = await bookingRepository.listByIdRoom(roomId);
-    const bookings = await bookingRepository.listByRoomId(roomId);
-    if (!room) throw forbiddenError();
-    if (room.capacity <= bookings.length) throw forbiddenError();
-  const booking = await bookingRepository.listByUserId(userId);
-
-  if (!booking || booking.userId !== userId) throw forbiddenError();
-  
-  const full = await bookingRepository.listByUserId(roomId);
-    if (full) throw forbiddenError();
-
-    return bookingRepository.editBooking({ id, roomId, userId });
+      const bookingExist = bookingRepository.listByUserId(userId);
+      if (!bookingExist) throw forbiddenError();
+    
+      const room = await bookingRepository.listByIdRoom(roomId);
+      if (!room) throw notFoundError();
+      // if (room.capacity < 1) throw forbiddenError();
+    
+      const full = await bookingRepository.list1ByRoomId(roomId);
+      if (full) throw forbiddenError();
+    
+      const result = await bookingRepository.editBooking(userId, roomId, bookingId);
+    
+      return { bookingId: result.id };
   },
 };
 

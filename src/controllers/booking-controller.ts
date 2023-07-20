@@ -44,35 +44,21 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response, ne
 // Rota para editar uma reserva
 export const editBooking = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const { userId } = req;
-  const bookingId = Number(req.params.bookingId);
+  const { bookingId } = req.params;
   const { roomId } = req.body as Record<string, number>;
-
-  if (!bookingId) {
-    // Erro de solicitação inválida (403) - bookingId está ausente
-    return res.sendStatus(403);
-  }
-
+  
   try {
-
-    const booking = await bookingService.getBookingByUserId(userId);
-
-    if (!booking || booking.userId !== userId) {
-      // Erro de acesso proibido (403) - usuário não tem reserva
-      return res.sendStatus(403);
-    }
-
-    await bookingService.checkBookingValidity(roomId);
-
-    // Atualiza a reserva
-    const updatedBooking = await bookingService.editBooking({
-      id: booking.id,
+    const update = {
+      bookingId: Number(bookingId),
+      userId,
       roomId,
-      userId: booking.userId,
-    });
+    };
 
-    return res.status(200).send({
-      bookingId: updatedBooking.id,
-    });
+    const result = await bookingService.editBooking(update);
+    return res.status(200).send(result);
   } catch (error) {
     next(error);
-}}
+  }
+};
+
+
