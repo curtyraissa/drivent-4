@@ -83,7 +83,10 @@ const bookingService = {
   const booking = await bookingRepository.listByUserId(userId);
 
   if (!booking || booking.userId !== userId) throw forbiddenError();
-    
+  
+  const full = await bookingRepository.listByUserId(roomId);
+    if (full) throw forbiddenError();
+
     return bookingRepository.editBooking({ id, roomId, userId });
   },
 };
