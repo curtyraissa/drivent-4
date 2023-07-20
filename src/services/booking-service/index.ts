@@ -70,7 +70,11 @@ const bookingService = {
       throw forbiddenError();
     }
 
-  await bookingService.checkBookingValidity(roomId);
+  // await bookingService.checkBookingValidity(roomId);
+  const room = await bookingRepository.listByIdRoom(roomId);
+    const bookings = await bookingRepository.listByRoomId(roomId);
+    if (!room) throw forbiddenError();
+    if (room.capacity <= bookings.length) throw forbiddenError();
   const booking = await bookingRepository.listByUserId(userId);
 
   if (!booking || booking.userId !== userId) throw forbiddenError();
