@@ -47,6 +47,7 @@ const bookingRepository = {
       data: {
         roomId,
         userId,
+        updatedAt: new Date(),
       },
     });
   },

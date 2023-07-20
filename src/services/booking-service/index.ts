@@ -54,6 +54,11 @@ const bookingService = {
   editBooking: async ({ id, roomId, userId }: { id: number; roomId: number; userId: number }) => {
     if (!roomId) throw badRequestError();
 
+    const bookingx = await bookingService.getBookingByUserId(userId);
+    if (!bookingx || bookingx.userId !== userId) {
+        throw forbiddenError// Erro de acesso proibido (403) - usuário não tem reserva
+      }
+
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
     if (!enrollment) throw forbiddenError();
 
