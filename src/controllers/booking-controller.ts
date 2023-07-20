@@ -47,21 +47,21 @@ export const editBooking = async (req: AuthenticatedRequest, res: Response, next
   const bookingId = Number(req.params.bookingId);
   const { roomId } = req.body as Record<string, number>;
 
-  // if (!bookingId) {
-  //   // Erro de solicitação inválida (403) - bookingId está ausente
-  //   return res.sendStatus(403);
-  // }
+  if (!bookingId) {
+    // Erro de solicitação inválida (403) - bookingId está ausente
+    return res.sendStatus(403);
+  }
 
   try {
 
     const booking = await bookingService.getBookingByUserId(userId);
 
-    // if (!booking || booking.userId !== userId) {
-    //   // Erro de acesso proibido (403) - usuário não tem reserva
-    //   return res.sendStatus(403);
-    // }
+    if (!booking || booking.userId !== userId) {
+      // Erro de acesso proibido (403) - usuário não tem reserva
+      return res.sendStatus(403);
+    }
 
-    // await bookingService.checkBookingValidity(roomId);
+    await bookingService.checkBookingValidity(roomId);
 
     // Atualiza a reserva
     const updatedBooking = await bookingService.editBooking({
@@ -74,8 +74,5 @@ export const editBooking = async (req: AuthenticatedRequest, res: Response, next
       bookingId: updatedBooking.id,
     });
   } catch (error) {
-    if (error.name === 'NotFoundError') {
-      return res.sendStatus(404);
-  }
-  return res.sendStatus(403);
+    next(error);
 }}
