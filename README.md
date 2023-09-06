@@ -1,76 +1,85 @@
-# Driven.t - Back-end
+<h1 align="center">Driven.t - Back-end</h1>
 
-Back-end for Driven.t, an event management solution.
+## 📝 Sobre
 
-## About
+Back-end para o Driven.t, uma solução de gerenciamento de eventos.
+O Driven.t é uma aplicação web com a qual você pode gerenciar todos os aspectos do seu evento.
 
-Driven.t is a web browser application with which you can manage every single aspect of your event.
+## 💻 Como Usar
 
-## How to run for development
+1. Clone o repositório:
 
-1. Clone this repository
-2. Install all dependencies
+```bash
+git clone https://github.com/seu-usuario/drivent-4.git
+cd drivent-4
+```
+
+2. Instale as dependencias
 
 ```bash
 npm i
 ```
 
-3. Create a PostgreSQL database with whatever name you want
-4. Configure the `.env.development` file using the `.env.example` file (see "Running application locally or inside docker section" for details)
-5. Run all migrations
+3. Crie um banco de dados PostgreSQL com o nome que desejar
+4. Configure o arquivo `.env.development` 
+5. Execute todas as migrações do banco de dados:
 
 ```bash
 npm run dev:migration:run
 ```
 
-6. Seed db
+6. Preencha o banco de dados:
 
 ```bash
 npm run dev:seed
 ```
 
-6. Run the back-end in a development environment:
+6. Inicie o back-end em ambiente de desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-## How to run tests
+## 💻 Como Testar
 
-1. Follow the steps in the last section
-2. Configure the `.env.test` file using the `.env.example` file (see "Running application locally or inside docker" section for details)
-3. Run all migrations:
+1. Configure o banco de dados PostgreSQL para testes:
+2. Configure o arquivo `.env.test`
+3. Execute todas as migrações do banco de dados para testes:
 
 ```bash
 npm run test:migration:run
 ```
 
-4. Run test:
+4. Rode os testes:
 
 ```bash
 npm run test
 ```
 
-## Building and starting for production
+###### Compilação e inicialização para produção
 
 ```bash
 npm run build
 npm start
 ```
 
-## Running migrations or generate prisma clients
+## 🛠 &nbsp;Tecnologias
+<div align="center">
+ <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="40" width="52" alt="node logo"  />
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" width="52" alt="js logo"  />   
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="40" width="52" alt="js logo"  />      
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="40" width="52" alt="express logo"  />
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/npm/npm-original-wordmark.svg" height="40" width="52" alt="npm logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="40" width="52" alt="git logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" height="40" width="52" alt="github logo" />                                   
+</div>
+<hr/>
 
-Before running migrations make sure you have a postgres db running based on `.env.development` or `.env.test` file for each environment. You can start a postgres instance by typing `npm run dev:postgres` or `npm run test:postgres`. The host name is the name of the postgres container inside docker-compose file if you are running the application inside a docker container or localhost if you are running it locally.
+## 💬 &nbsp;Contatos
+<img align="left" src="https://avatars.githubusercontent.com/curtyraissa?size=100">
 
-You can operate on databases for different environments, but it is necessary to populate correct env variables for each environment first, so in order to perform db operations type the following commands:
+Feito por [Raissa Curty](https://github.com/curtyraissa)!
 
-- `npm run dev:migration:run` - run migrations for development environment by loading envs from .env.development file. It uses [dotenv-cli](https://github.com/entropitor/dotenv-cli#readme) to load envs from .env.development file.
-- `npm run test:migration:run` - the same, but for test environment
-
-- `npm run dev:migration:generate -- --name ATOMIC_OPERATION_NAME` - generate and run migration and prisma client for development environment by loading envs from .env.development file. Replace `ATOMIC_OPERATION_NAME` by the name of the migration you want to generate.
-
-## What to do when add new ENV VARIABLES
-
-There are several things you need to do when you add new ENV VARIABLES:
-- Add them to `.env.example` file
-- Add them to your local `.env.development` and `.env.test` files
+<a href="https://www.linkedin.com/in/raissa-curty/" target="_blank">
+    <img style="border-radius:50%;" src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/linkedin/default.svg" width="52" height="40" alt="linkedin logo"  />
+</a>&nbsp;
